@@ -45,6 +45,9 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:reset": "prisma migrate reset --force",
+    "db:setup": "prisma generate && prisma db push && npm run db:seed",
+    "db:backup": "mkdir -p backups && pg_dump $DATABASE_URL > backups/backup_$(date +%Y%m%d_%H%M%S).sql",
     "postinstall": "prisma generate",
     "prepare": "husky",
     "lint-staged": "lint-staged"
