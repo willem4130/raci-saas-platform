@@ -12,6 +12,7 @@ import { projectRouter } from './routers/project';
 import { matrixRouter } from './routers/matrix';
 import { taskRouter } from './routers/task';
 import { assignmentRouter } from './routers/assignment';
+import { analyticsRouter } from './routers/analytics';
 
 /**
  * Main application router
@@ -23,6 +24,7 @@ export const appRouter = createTRPCRouter({
   matrix: matrixRouter,
   task: taskRouter,
   assignment: assignmentRouter,
+  analytics: analyticsRouter,
 });
 
 // Export type definition of API

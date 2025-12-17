@@ -112,6 +112,36 @@ npm run typecheck        # Verify no type errors
 - **Row-level security** - Middleware enforces tenant boundaries
 - **Audit logging** - All mutations tracked for compliance
 
+## Phase 3: Analytics & Workload Dashboard (Implemented)
+
+**New Routes:**
+- `/dashboard/analytics` - Comprehensive workload analytics with KPI metrics, charts, heatmaps, and export
+
+**Analytics Components:**
+- `AnalyticsMetricsGrid` - 4 KPI cards (total tasks, completion rate, active members, overloaded count)
+- `WorkloadDistributionChart` - Stacked bar chart (Recharts) showing R/A/C/I assignments per member
+- `BottleneckAlertCard` - Overloaded members alert (workload > 80%)
+- `CompletionTrackingCard` - Pie chart with task status distribution + priority breakdown
+- `WorkloadHeatmap` - 2D member × role grid with color-coded workload intensity
+- `ExportAnalyticsDialog` - PDF/CSV export using jsPDF 3.0.4 and native JS
+
+**Analytics tRPC Router (`/src/server/api/routers/analytics.ts`):**
+- `getOrganizationAnalytics` - KPI metrics (tasks, members, completion rate, overloaded count)
+- `getMemberWorkloadDistribution` - Workload data for bar charts
+- `getBottlenecks` - Overloaded members (configurable threshold, default 80%)
+- `getCompletionMetrics` - Task completion tracking by status and priority
+- `getRoleHeatmap` - Heatmap data with member × role aggregation
+
+**RACI Color Scheme (Consistent):**
+- R (Responsible): #3b82f6 (blue-500)
+- A (Accountable): #22c55e (green-500)
+- C (Consulted): #eab308 (yellow-500)
+- I (Informed): #a855f7 (purple-500)
+
+**Export Formats:**
+- PDF: Complete report with KPI tables, workload distribution, and bottleneck list
+- CSV: Workload data for spreadsheet analysis (member name, job title, R/A/C/I counts, total workload %)
+
 ## Performance Targets
 
 - Virtual scrolling for **200 tasks × 50 members** (10,000 cells)

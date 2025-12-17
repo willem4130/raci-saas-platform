@@ -9,6 +9,7 @@ import {
   Building2,
   FolderKanban,
   Grid3x3,
+  Activity,
   Users,
   Settings,
   LogOut,
@@ -21,6 +22,7 @@ const navigation = [
   { name: 'Organizations', href: '/dashboard/organizations', icon: Building2 },
   { name: 'Projects', href: '/dashboard/projects', icon: FolderKanban },
   { name: 'Matrices', href: '/dashboard/matrices', icon: Grid3x3 },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: Activity },
   { name: 'Members', href: '/dashboard/members', icon: Users },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
