@@ -28,13 +28,13 @@ export default function AnalyticsPage() {
   const [selectedMatrixId] = useState<string | undefined>();
 
   // Fetch user's organizations to get the organization ID
-  const { data: organizations } = api.organization.list.useQuery();
+  const { data: organizations, isLoading: orgsLoading } = api.organization.list.useQuery();
 
   // Use the first organization by default (multi-org selector can be added later)
   const organizationId = organizations?.[0]?.id;
 
-  // Skip analytics queries if no organization is available
-  const skipQueries = !organizationId;
+  // Skip analytics queries if no organization is available or still loading
+  const skipQueries = orgsLoading || !organizationId;
 
   // Fetch analytics data (skip if no organization)
   const {
@@ -97,6 +97,7 @@ export default function AnalyticsPage() {
 
   // Loading state
   const isLoading =
+    orgsLoading ||
     analyticsLoading ||
     workloadLoading ||
     bottlenecksLoading ||

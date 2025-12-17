@@ -43,7 +43,8 @@ export function CompletionTrackingCard({ metrics }: CompletionTrackingCardProps)
   ].filter((item) => item.value > 0); // Only show non-zero segments
 
   // Custom label renderer
-  const renderLabel = (entry: { value: number; name: string }) => {
+  const renderLabel = (entry: { value?: number; name?: string }) => {
+    if (!entry.value || !entry.name) return '';
     const percent = ((entry.value / metrics.totalTasks) * 100).toFixed(0);
     return `${entry.name}: ${percent}%`;
   };

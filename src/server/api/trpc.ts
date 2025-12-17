@@ -57,8 +57,37 @@ export const publicProcedure = t.procedure;
 /**
  * Protected (authenticated) procedure
  * Requires valid user session
+ *
+ * DEV MODE: Auto-creates a test session if not authenticated
  */
-export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
+export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+  // Development bypass: ALWAYS auto-login with test user in dev mode
+  if (process.env.NODE_ENV === 'development') {
+    // Fetch the dev test user from the database
+    const testUser = await ctx.db.user.findFirst({
+      where: { email: 'sarah.chen@techcorp.com' },
+    });
+
+    if (testUser) {
+      // Create a mock session for development (overrides any existing session)
+      const mockSession = {
+        user: {
+          id: testUser.id,
+          email: testUser.email,
+          name: testUser.name,
+        },
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      };
+
+      return next({
+        ctx: {
+          ...ctx,
+          session: mockSession,
+        },
+      });
+    }
+  }
+
   if (!ctx.session?.user) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
@@ -79,9 +108,10 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
  * Requires authentication and valid organization access
  */
 export const organizationProcedure = protectedProcedure.use(
-  async ({ ctx, next, input }) => {
-    // Extract organizationId from input
-    const inputData = input as { organizationId?: string };
+  async ({ ctx, next, getRawInput }) => {
+    // Get raw input before zod validation
+    const rawInput = await getRawInput();
+    const inputData = rawInput as { organizationId?: string };
 
     if (!inputData?.organizationId) {
       throw new TRPCError({
@@ -96,6 +126,7 @@ export const organizationProcedure = protectedProcedure.use(
       inputData.organizationId
     );
 
+    // Call next with enhanced context
     return next({
       ctx: {
         ...ctx,
