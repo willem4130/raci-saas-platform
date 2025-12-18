@@ -142,77 +142,102 @@ export default function MatrixDetailPage() {
     })) ?? []
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.push('/dashboard')}
-              className="mr-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
+      <div className="bg-gradient-to-r from-blue-50 via-white to-purple-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+        <div className="flex items-start justify-between">
+          <div className="space-y-3 flex-1">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push('/dashboard')}
+                className="hover:bg-blue-100 transition-colors"
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+                {matrix.name}
+              </h1>
+              <Badge
+                variant="secondary"
+                className={matrix.archivedAt
+                  ? "bg-gray-100 text-gray-700 border border-gray-300"
+                  : "bg-green-100 text-green-700 border border-green-300 shadow-sm"
+                }
+              >
+                {matrix.archivedAt ? 'Archived' : 'Active'}
+              </Badge>
+            </div>
+            {matrix.description && (
+              <p className="text-gray-700 pl-12 text-base">{matrix.description}</p>
+            )}
+            <div className="pl-12 flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-500">Project:</span>
+              <span className="text-sm font-semibold text-gray-900 bg-white px-3 py-1 rounded-md border border-gray-200 shadow-sm">
+                {matrix.project.name}
+              </span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="shadow-sm hover:shadow-md transition-shadow">
+              <Download className="mr-2 h-4 w-4" />
+              Export
             </Button>
-            <h1 className="text-3xl font-bold tracking-tight">{matrix.name}</h1>
-            <Badge variant="secondary">{matrix.archivedAt ? 'Archived' : 'Active'}</Badge>
+            <Button variant="outline" size="sm" className="shadow-sm hover:shadow-md transition-shadow">
+              <Save className="mr-2 h-4 w-4" />
+              Save
+            </Button>
           </div>
-          {matrix.description && (
-            <p className="text-muted-foreground pl-12">{matrix.description}</p>
-          )}
-          <div className="pl-12 text-sm text-muted-foreground">
-            {matrix.project.name}
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="mr-2 h-4 w-4" />
-            Export
-          </Button>
-          <Button variant="outline" size="sm">
-            <Save className="mr-2 h-4 w-4" />
-            Save
-          </Button>
         </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-white shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Tasks</CardTitle>
-            <ListTodo className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-bold text-blue-900 uppercase tracking-wide">Total Tasks</CardTitle>
+            <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center shadow-md">
+              <ListTodo className="h-5 w-5 text-white" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{raciTasks.length}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-4xl font-bold bg-gradient-to-r from-blue-900 to-blue-600 bg-clip-text text-transparent">
+              {raciTasks.length}
+            </div>
+            <p className="text-sm text-blue-700 font-medium mt-1">
               {raciTasks.filter((t) => t.status === 'IN_PROGRESS').length} in progress
             </p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-green-200 bg-gradient-to-br from-green-50 to-white shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Team Members</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-bold text-green-900 uppercase tracking-wide">Team Members</CardTitle>
+            <div className="h-10 w-10 rounded-full bg-green-500 flex items-center justify-center shadow-md">
+              <Users className="h-5 w-5 text-white" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{raciMembers.length}</div>
-            <p className="text-xs text-muted-foreground">Across all departments</p>
+            <div className="text-4xl font-bold bg-gradient-to-r from-green-900 to-green-600 bg-clip-text text-transparent">
+              {raciMembers.length}
+            </div>
+            <p className="text-sm text-green-700 font-medium mt-1">Active collaborators</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white shadow-md hover:shadow-xl transition-all duration-300 hover:scale-105">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Assignments</CardTitle>
-            <Badge variant="outline" className="h-4">
-              RACI
-            </Badge>
+            <CardTitle className="text-sm font-bold text-purple-900 uppercase tracking-wide">Assignments</CardTitle>
+            <div className="h-10 w-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-md">
+              <Badge variant="outline" className="h-6 w-6 flex items-center justify-center bg-white text-purple-900 font-bold border-0 text-xs">
+                RACI
+              </Badge>
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-4xl font-bold bg-gradient-to-r from-purple-900 to-pink-600 bg-clip-text text-transparent">
               {raciTasks.reduce((acc, task) => acc + task.assignments.length, 0)}
             </div>
-            <p className="text-xs text-muted-foreground">Total role assignments</p>
+            <p className="text-sm text-purple-700 font-medium mt-1">Role assignments</p>
           </CardContent>
         </Card>
       </div>
